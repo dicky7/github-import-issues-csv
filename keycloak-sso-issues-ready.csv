@@ -1,0 +1,518 @@
+project_issue_id,project_parent_issue_id,project_estimate,account_type,account_name,repo_name,project_id,project_number,status,milestone,labels,title,body
+milestone-m1-infrastructure-ready,,0,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M1 — Infrastructure Ready,milestone,M1 — Infrastructure Ready,"Keycloak running on Docker Compose with PostgreSQL, nginx reverse proxy configured, TLS active on staging and production domains. Health check endpoint responding.
+
+Due: Week 2"
+milestone-m2-realm-and-identity-configured,,0,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M2 — Realm & Identity Configured,milestone,M2 — Realm & Identity Configured,"Internal and external realms created. Password policies set. Realm-level roles defined. User profile attributes confirmed. app-provisioner service client created.
+
+Due: Week 3"
+milestone-m3-users-migrated,,0,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M3 — Users Migrated,milestone,M3 — Users Migrated,"All existing users bulk-imported into Keycloak with bcrypt hashes. keycloak_id backfilled into all app databases. Zero NULL keycloak_id for active users. Verified on staging first.
+
+Due: Week 3"
+milestone-m4-wave-1-apps-integrated,,0,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M4 — Wave 1 Apps Integrated,milestone,M4 — Wave 1 Apps Integrated,"1–2 lowest-risk internal apps integrated with Keycloak SSO. OIDC flow working end-to-end. JWT validation on backend confirmed. Local auth still active in parallel.
+
+Due: Week 4"
+milestone-m5-wave-2-apps-integrated,,0,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M5 — Wave 2 Apps Integrated,milestone,M5 — Wave 2 Apps Integrated,"All remaining internal apps integrated. Client roles defined per app. Access control via JWT claims verified for all internal users.
+
+Due: Week 6"
+milestone-m6-auth-facade-live,,0,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M6 — Auth Facade Live,milestone,M6 — Auth Facade Live,"Auth facade deployed. Old mobile app versions routing through ROPC bridge to Keycloak. Version gate active. New mobile app using PKCE flow. Both paths verified.
+
+Due: Week 6"
+milestone-m7-wave-3-apps-integrated,,0,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M7 — Wave 3 Apps Integrated,milestone,M7 — Wave 3 Apps Integrated,"All customer-facing apps integrated with Keycloak external realm. End-to-end tested with real external users. Mobile new version live in app stores.
+
+Due: Week 8"
+milestone-m8-local-auth-decommissioned,,0,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M8 — Local Auth Decommissioned,milestone,M8 — Local Auth Decommissioned,"Local auth disabled on all apps. Password columns removed from app databases. Unused auth dependencies removed from codebases. SSO is the only login method.
+
+Due: Week 12"
+milestone-m9-mobile-facade-sunset,,0,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M9 — Mobile Facade Sunset,milestone,M9 — Mobile Facade Sunset,"Auth facade returns 410 Gone for old mobile versions. Deprecation notice shown from month 3–4. Hard cutoff enforced at month 6–9 based on adoption analytics.
+
+Due: Month 9"
+task-m1-infrastructure-ready-set-up-staging-server-and-install-docker,milestone-m1-infrastructure-ready,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M1 — Infrastructure Ready,"task,priority-p0,size-s,role-fullstack",Set up staging server and install Docker,"Provision a VM or server for the staging environment (sso.mozhaiq.dev). Install Docker and Docker Compose. Confirm root/sudo access and open required ports (80 443 8080).
+
+Metadata:
+- Priority: P0
+- Size: S
+- Role: Fullstack
+- Milestone: M1 — Infrastructure Ready"
+task-m1-infrastructure-ready-write-docker-compose-yml-for-keycloak-and-postgresql,milestone-m1-infrastructure-ready,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M1 — Infrastructure Ready,"task,priority-p0,size-s,role-fullstack",Write docker-compose.yml for Keycloak and PostgreSQL,"Create the docker-compose.yml with Keycloak (latest stable) and PostgreSQL 16 services as defined in the plan. Include named volume for pgdata. Set restart: unless-stopped on both services.
+
+Metadata:
+- Priority: P0
+- Size: S
+- Role: Fullstack
+- Milestone: M1 — Infrastructure Ready"
+task-m1-infrastructure-ready-configure-env-file-and-secrets-management,milestone-m1-infrastructure-ready,1,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M1 — Infrastructure Ready,"task,priority-p0,size-xs,role-fullstack",Configure .env file and secrets management,"Create .env file with KC_DB_PASSWORD. Add .env to .gitignore. Document secret rotation process. Never commit credentials to the repo.
+
+Metadata:
+- Priority: P0
+- Size: XS
+- Role: Fullstack
+- Milestone: M1 — Infrastructure Ready"
+task-m1-infrastructure-ready-boot-keycloak-in-production-mode-on-staging,milestone-m1-infrastructure-ready,1,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M1 — Infrastructure Ready,"task,priority-p0,size-xs,role-fullstack",Boot Keycloak in production mode on staging,"Run docker compose up -d on staging. Verify Keycloak starts with start --optimized flag (not dev mode). Confirm Admin Console is accessible on port 8080 locally.
+
+Metadata:
+- Priority: P0
+- Size: XS
+- Role: Fullstack
+- Milestone: M1 — Infrastructure Ready"
+task-m1-infrastructure-ready-verify-postgresql-connection-from-keycloak,milestone-m1-infrastructure-ready,1,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M1 — Infrastructure Ready,"task,priority-p0,size-xs,role-fullstack",Verify PostgreSQL connection from Keycloak,"Run docker compose exec postgres psql -U keycloak -c to confirm DB is up and Keycloak connected successfully on first boot.
+
+Metadata:
+- Priority: P0
+- Size: XS
+- Role: Fullstack
+- Milestone: M1 — Infrastructure Ready"
+task-m1-infrastructure-ready-configure-nginx-reverse-proxy-on-staging,milestone-m1-infrastructure-ready,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M1 — Infrastructure Ready,"task,priority-p0,size-s,role-fullstack",Configure nginx reverse proxy on staging,"Install nginx on the staging server. Write server block for sso.mozhaiq.dev with proxy_pass to localhost:8080. Set all required proxy headers (Host X-Real-IP X-Forwarded-For X-Forwarded-Proto).
+
+Metadata:
+- Priority: P0
+- Size: S
+- Role: Fullstack
+- Milestone: M1 — Infrastructure Ready"
+task-m1-infrastructure-ready-obtain-and-install-tls-certificate-for-staging-domain,milestone-m1-infrastructure-ready,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M1 — Infrastructure Ready,"task,priority-p0,size-s,role-fullstack",Obtain and install TLS certificate for staging domain,"Obtain TLS certificate for sso.mozhaiq.dev (Let's Encrypt or internal CA). Configure ssl_certificate and ssl_certificate_key in nginx. Verify HTTPS works end-to-end.
+
+Metadata:
+- Priority: P0
+- Size: S
+- Role: Fullstack
+- Milestone: M1 — Infrastructure Ready"
+task-m1-infrastructure-ready-set-kc-proxy-edge-and-kc-hostname-in-keycloak-config,milestone-m1-infrastructure-ready,1,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M1 — Infrastructure Ready,"task,priority-p0,size-xs,role-fullstack",Set KC_PROXY=edge and KC_HOSTNAME in Keycloak config,"Add KC_PROXY: edge and KC_HOSTNAME: sso.mozhaiq.dev to docker-compose.yml environment block. Restart container and verify Keycloak recognises the correct hostname.
+
+Metadata:
+- Priority: P0
+- Size: XS
+- Role: Fullstack
+- Milestone: M1 — Infrastructure Ready"
+task-m1-infrastructure-ready-verify-keycloak-health-endpoint-on-staging,milestone-m1-infrastructure-ready,1,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M1 — Infrastructure Ready,"task,priority-p0,size-xs,role-apm",Verify Keycloak health endpoint on staging,"Confirm GET https://sso.mozhaiq.dev/health/live and /health/ready return 200. Set up an uptime alert on these endpoints.
+
+Metadata:
+- Priority: P0
+- Size: XS
+- Role: APM
+- Milestone: M1 — Infrastructure Ready"
+task-m1-infrastructure-ready-repeat-infrastructure-setup-for-production,milestone-m1-infrastructure-ready,3,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M1 — Infrastructure Ready,"task,priority-p0,size-m,role-fullstack",Repeat infrastructure setup for production,"Replicate all infrastructure steps (Docker Compose nginx TLS .env) on the production server for sso.kiebtg.app. Confirm health endpoints live.
+
+Metadata:
+- Priority: P0
+- Size: M
+- Role: Fullstack
+- Milestone: M1 — Infrastructure Ready"
+task-m2-realm-and-identity-configured-create-internal-realm-in-keycloak-admin-console,milestone-m2-realm-and-identity-configured,1,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M2 — Realm & Identity Configured,"task,priority-p0,size-xs,role-fullstack",Create internal realm in Keycloak Admin Console,"Log into Admin Console. Create realm named internal. Confirm it is isolated from master realm. Do not use master realm for any apps.
+
+Metadata:
+- Priority: P0
+- Size: XS
+- Role: Fullstack
+- Milestone: M2 — Realm & Identity Configured"
+task-m2-realm-and-identity-configured-create-external-realm-in-keycloak-admin-console,milestone-m2-realm-and-identity-configured,1,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M2 — Realm & Identity Configured,"task,priority-p0,size-xs,role-fullstack",Create external realm in Keycloak Admin Console,"Create realm named external in Admin Console. Confirm both realms exist independently with separate login pages.
+
+Metadata:
+- Priority: P0
+- Size: XS
+- Role: Fullstack
+- Milestone: M2 — Realm & Identity Configured"
+task-m2-realm-and-identity-configured-configure-password-policy-for-internal-realm,milestone-m2-realm-and-identity-configured,1,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M2 — Realm & Identity Configured,"task,priority-p0,size-xs,role-fullstack",Configure password policy for internal realm,"In internal realm: set minimum length 8 require uppercase lowercase digit hashing bcrypt and password history 5. Validate settings are saved correctly.
+
+Metadata:
+- Priority: P0
+- Size: XS
+- Role: Fullstack
+- Milestone: M2 — Realm & Identity Configured"
+task-m2-realm-and-identity-configured-configure-password-policy-for-external-realm,milestone-m2-realm-and-identity-configured,1,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M2 — Realm & Identity Configured,"task,priority-p0,size-xs,role-fullstack",Configure password policy for external realm,"In external realm: apply the same password policy as internal (min length 8 uppercase lowercase digit bcrypt history 5).
+
+Metadata:
+- Priority: P0
+- Size: XS
+- Role: Fullstack
+- Milestone: M2 — Realm & Identity Configured"
+task-m2-realm-and-identity-configured-define-realm-level-roles-for-internal-realm,milestone-m2-realm-and-identity-configured,1,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M2 — Realm & Identity Configured,"task,priority-p1,size-xs,role-fullstack",Define realm-level roles for internal realm,"Create realm roles: employee and admin in the internal realm via Admin Console → Realm Roles.
+
+Metadata:
+- Priority: P1
+- Size: XS
+- Role: Fullstack
+- Milestone: M2 — Realm & Identity Configured"
+task-m2-realm-and-identity-configured-define-realm-level-roles-for-external-realm,milestone-m2-realm-and-identity-configured,1,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M2 — Realm & Identity Configured,"task,priority-p1,size-xs,role-fullstack",Define realm-level roles for external realm,"Create realm roles: customer and admin in the external realm via Admin Console → Realm Roles.
+
+Metadata:
+- Priority: P1
+- Size: XS
+- Role: Fullstack
+- Milestone: M2 — Realm & Identity Configured"
+task-m2-realm-and-identity-configured-create-app-provisioner-service-client-in-both-realms,milestone-m2-realm-and-identity-configured,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M2 — Realm & Identity Configured,"task,priority-p0,size-s,role-fullstack",Create app-provisioner service client in both realms,"Create a confidential client named app-provisioner in both internal and external realms. Enable Client Credentials grant and assign realm-admin role to its service account. Store client secret in .env.
+
+Metadata:
+- Priority: P0
+- Size: S
+- Role: Fullstack
+- Milestone: M2 — Realm & Identity Configured"
+task-m2-realm-and-identity-configured-create-mobile-legacy-bridge-client-in-external-realm,milestone-m2-realm-and-identity-configured,1,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M2 — Realm & Identity Configured,"task,priority-p1,size-xs,role-fullstack",Create mobile-legacy-bridge client in external realm,"Create confidential client mobile-legacy-bridge in external realm. Enable Direct Access Grants (ROPC). Keep this disabled on all other clients.
+
+Metadata:
+- Priority: P1
+- Size: XS
+- Role: Fullstack
+- Milestone: M2 — Realm & Identity Configured"
+task-m2-realm-and-identity-configured-document-realm-config-and-export-realm-json-to-git,milestone-m2-realm-and-identity-configured,1,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M2 — Realm & Identity Configured,"task,priority-p1,size-xs,role-apm",Document realm config and export realm JSON to git,"Export realm JSON from Admin Console for both internal and external realms. Commit to git repo as baseline config backup. Schedule weekly re-export.
+
+Metadata:
+- Priority: P1
+- Size: XS
+- Role: APM
+- Milestone: M2 — Realm & Identity Configured"
+task-m3-users-migrated-verify-bcrypt-cost-factor-across-all-app-codebases,milestone-m3-users-migrated,1,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M3 — Users Migrated,"task,priority-p0,size-xs,role-fullstack",Verify bcrypt cost factor across all app codebases,"Inspect existing password hashes in each app DB: the number after $2b$ is the cost factor. Confirm it is consistent across all apps. Document the confirmed value.
+
+Metadata:
+- Priority: P0
+- Size: XS
+- Role: Fullstack
+- Milestone: M3 — Users Migrated"
+task-m3-users-migrated-add-keycloak-id-and-sso-linked-at-columns-to-all-app-dbs,milestone-m3-users-migrated,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M3 — Users Migrated,"task,priority-p0,size-s,role-fullstack",Add keycloak_id and sso_linked_at columns to all app DBs,"Run ALTER TABLE users ADD COLUMN keycloak_id VARCHAR(255) UNIQUE and ADD COLUMN sso_linked_at TIMESTAMP on each app database. Add index on keycloak_id.
+
+Metadata:
+- Priority: P0
+- Size: S
+- Role: Fullstack
+- Milestone: M3 — Users Migrated"
+task-m3-users-migrated-write-and-test-bulk-import-script-on-staging,milestone-m3-users-migrated,3,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M3 — Users Migrated,"task,priority-p0,size-m,role-fullstack",Write and test bulk import script on staging,"Implement bulk-import-users.js as defined in the plan. Set KC_REALM=external (or internal). Run against staging Keycloak (sso.mozhaiq.dev) with a test subset of users first.
+
+Metadata:
+- Priority: P0
+- Size: M
+- Role: Fullstack
+- Milestone: M3 — Users Migrated"
+task-m3-users-migrated-verify-test-users-can-log-in-on-staging-via-keycloak,milestone-m3-users-migrated,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M3 — Users Migrated,"task,priority-p0,size-s,role-fullstack",Verify test users can log in on staging via Keycloak,"Pick 3–5 test users from staging import. Log in via Keycloak login page using their existing password. Confirm authentication succeeds without password reset.
+
+Metadata:
+- Priority: P0
+- Size: S
+- Role: Fullstack
+- Milestone: M3 — Users Migrated"
+task-m3-users-migrated-run-full-user-import-on-staging-all-users,milestone-m3-users-migrated,3,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M3 — Users Migrated,"task,priority-p0,size-m,role-fullstack",Run full user import on staging (all users),"Execute bulk-import-users.js against all users in each app DB targeting sso.mozhaiq.dev. Check import-errors.json and re-run for any failures. Confirm created count matches DB row count.
+
+Metadata:
+- Priority: P0
+- Size: M
+- Role: Fullstack
+- Milestone: M3 — Users Migrated"
+task-m3-users-migrated-write-and-run-backfill-script-on-staging,milestone-m3-users-migrated,3,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M3 — Users Migrated,"task,priority-p0,size-m,role-fullstack",Write and run backfill script on staging,"Implement backfill-keycloak-ids.js. Run against staging DB. Verify keycloak_id is populated for all users. Confirm zero NULL keycloak_id remaining for active users.
+
+Metadata:
+- Priority: P0
+- Size: M
+- Role: Fullstack
+- Milestone: M3 — Users Migrated"
+task-m3-users-migrated-run-full-user-import-on-production-keycloak,milestone-m3-users-migrated,3,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M3 — Users Migrated,"task,priority-p0,size-m,role-fullstack",Run full user import on production Keycloak,"Execute bulk import against production Keycloak (sso.kiebtg.app) for both internal and external realms. Review errors. Confirm all users exist in Keycloak.
+
+Metadata:
+- Priority: P0
+- Size: M
+- Role: Fullstack
+- Milestone: M3 — Users Migrated"
+task-m3-users-migrated-run-backfill-script-on-production-db,milestone-m3-users-migrated,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M3 — Users Migrated,"task,priority-p0,size-s,role-fullstack",Run backfill script on production DB,"Execute backfill-keycloak-ids.js against all production app databases. Confirm keycloak_id written for every user. Spot-check 10+ rows manually.
+
+Metadata:
+- Priority: P0
+- Size: S
+- Role: Fullstack
+- Milestone: M3 — Users Migrated"
+task-m3-users-migrated-apm-track-import-completion-across-all-apps,milestone-m3-users-migrated,1,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M3 — Users Migrated,"task,priority-p1,size-xs,role-apm",APM: Track import completion across all apps,"Create a simple tracking sheet: app name confirmed bcrypt cost import count errors resolved keycloak_id backfill complete. Update after each app is processed.
+
+Metadata:
+- Priority: P1
+- Size: XS
+- Role: APM
+- Milestone: M3 — Users Migrated"
+task-m4-wave-1-apps-integrated-register-wave-1-app-as-keycloak-client,milestone-m4-wave-1-apps-integrated,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M4 — Wave 1 Apps Integrated,"task,priority-p0,size-s,role-fullstack",Register Wave 1 app as Keycloak client,"In the appropriate realm create a new Client for the first app. Set Client ID protocol redirect URIs web origins and client authentication (OFF for SPA ON for confidential). Use exact redirect URIs.
+
+Metadata:
+- Priority: P0
+- Size: S
+- Role: Fullstack
+- Milestone: M4 — Wave 1 Apps Integrated"
+task-m4-wave-1-apps-integrated-integrate-wave-1-spa-with-oidc-client-ts,milestone-m4-wave-1-apps-integrated,3,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M4 — Wave 1 Apps Integrated,"task,priority-p0,size-m,role-fullstack",Integrate Wave 1 SPA with oidc-client-ts,"Install oidc-client-ts. Implement UserManager with correct authority client_id and redirect_uri. Wire signinRedirect and signinRedirectCallback. Store token in memory only — never localStorage.
+
+Metadata:
+- Priority: P0
+- Size: M
+- Role: Fullstack
+- Milestone: M4 — Wave 1 Apps Integrated"
+task-m4-wave-1-apps-integrated-implement-jwt-validation-middleware-on-wave-1-backend-api,milestone-m4-wave-1-apps-integrated,3,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M4 — Wave 1 Apps Integrated,"task,priority-p0,size-m,role-fullstack",Implement JWT validation middleware on Wave 1 backend API,"Install jwks-rsa and jsonwebtoken. Implement verifyToken with JWKS caching (10 min TTL). Validate RS256 algorithm correct audience and correct issuer on every request.
+
+Metadata:
+- Priority: P0
+- Size: M
+- Role: Fullstack
+- Milestone: M4 — Wave 1 Apps Integrated"
+task-m4-wave-1-apps-integrated-implement-sso-callback-and-keycloak-id-lookup-on-wave-1-app,milestone-m4-wave-1-apps-integrated,3,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M4 — Wave 1 Apps Integrated,"task,priority-p0,size-m,role-fullstack",Implement SSO callback and keycloak_id lookup on Wave 1 app,"On the SSO callback route: extract sub and email from JWT. Look up user by keycloak_id. If found create session directly. If not found handle as new user creation.
+
+Metadata:
+- Priority: P0
+- Size: M
+- Role: Fullstack
+- Milestone: M4 — Wave 1 Apps Integrated"
+task-m4-wave-1-apps-integrated-define-client-level-roles-for-wave-1-app-in-keycloak,milestone-m4-wave-1-apps-integrated,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M4 — Wave 1 Apps Integrated,"task,priority-p1,size-s,role-fullstack",Define client-level roles for Wave 1 app in Keycloak,"In the Wave 1 app's Keycloak client define the required client roles following the naming convention app-{id}:{resource}:{action}. Assign roles to test users and verify they appear in JWT claims.
+
+Metadata:
+- Priority: P1
+- Size: S
+- Role: Fullstack
+- Milestone: M4 — Wave 1 Apps Integrated"
+task-m4-wave-1-apps-integrated-end-to-end-test-wave-1-sso-login-flow,milestone-m4-wave-1-apps-integrated,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M4 — Wave 1 Apps Integrated,"task,priority-p0,size-s,role-fullstack",End-to-end test Wave 1 SSO login flow,"Perform full login test: visit app → redirect to Keycloak → enter credentials → callback → session created → API call with JWT → authorized response. Confirm no regressions.
+
+Metadata:
+- Priority: P0
+- Size: S
+- Role: Fullstack
+- Milestone: M4 — Wave 1 Apps Integrated"
+task-m4-wave-1-apps-integrated-apm-communicate-wave-1-sso-rollout-to-internal-users,milestone-m4-wave-1-apps-integrated,1,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M4 — Wave 1 Apps Integrated,"task,priority-p1,size-xs,role-apm",APM: Communicate Wave 1 SSO rollout to internal users,"Draft and send internal notice about the SSO login change for Wave 1 app. Include what changes what stays the same and who to contact for issues.
+
+Metadata:
+- Priority: P1
+- Size: XS
+- Role: APM
+- Milestone: M4 — Wave 1 Apps Integrated"
+task-m5-wave-2-apps-integrated-register-remaining-internal-apps-as-keycloak-clients-wave-2,milestone-m5-wave-2-apps-integrated,3,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M5 — Wave 2 Apps Integrated,"task,priority-p0,size-m,role-fullstack",Register remaining internal apps as Keycloak clients (Wave 2),"For each remaining internal app register a Keycloak client with exact redirect URIs client authentication settings and web origins. One client per app.
+
+Metadata:
+- Priority: P0
+- Size: M
+- Role: Fullstack
+- Milestone: M5 — Wave 2 Apps Integrated"
+task-m5-wave-2-apps-integrated-integrate-wave-2-spas-with-oidc-client-ts,milestone-m5-wave-2-apps-integrated,5,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M5 — Wave 2 Apps Integrated,"task,priority-p0,size-l,role-fullstack",Integrate Wave 2 SPAs with oidc-client-ts,"Apply the same oidc-client-ts integration pattern from Wave 1 to all remaining internal SPAs. Reuse the same pattern — do not invent new approaches per app.
+
+Metadata:
+- Priority: P0
+- Size: L
+- Role: Fullstack
+- Milestone: M5 — Wave 2 Apps Integrated"
+task-m5-wave-2-apps-integrated-implement-jwt-validation-on-wave-2-backend-apis,milestone-m5-wave-2-apps-integrated,5,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M5 — Wave 2 Apps Integrated,"task,priority-p0,size-l,role-fullstack",Implement JWT validation on Wave 2 backend APIs,"Apply the same JWKS-based JWT middleware from Wave 1 to all remaining internal backend APIs. Confirm correct issuer and audience per app.
+
+Metadata:
+- Priority: P0
+- Size: L
+- Role: Fullstack
+- Milestone: M5 — Wave 2 Apps Integrated"
+task-m5-wave-2-apps-integrated-define-client-level-roles-for-all-wave-2-apps,milestone-m5-wave-2-apps-integrated,3,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M5 — Wave 2 Apps Integrated,"task,priority-p1,size-m,role-fullstack",Define client-level roles for all Wave 2 apps,"For each Wave 2 app define client roles in Keycloak following the naming convention. Assign roles to appropriate users or groups.
+
+Metadata:
+- Priority: P1
+- Size: M
+- Role: Fullstack
+- Milestone: M5 — Wave 2 Apps Integrated"
+task-m5-wave-2-apps-integrated-end-to-end-test-all-wave-2-apps,milestone-m5-wave-2-apps-integrated,3,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M5 — Wave 2 Apps Integrated,"task,priority-p0,size-m,role-fullstack",End-to-end test all Wave 2 apps,"Full login test for each Wave 2 app. Confirm JWT flow token validation and role-based access all work correctly per app.
+
+Metadata:
+- Priority: P0
+- Size: M
+- Role: Fullstack
+- Milestone: M5 — Wave 2 Apps Integrated"
+task-m5-wave-2-apps-integrated-apm-update-internal-team-access-matrix,milestone-m5-wave-2-apps-integrated,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M5 — Wave 2 Apps Integrated,"task,priority-p1,size-s,role-apm",APM: Update internal team access matrix,"Update the permission matrix document (app vs group vs roles) to reflect all Wave 2 client roles now live in Keycloak. Share with team leads.
+
+Metadata:
+- Priority: P1
+- Size: S
+- Role: APM
+- Milestone: M5 — Wave 2 Apps Integrated"
+task-m6-auth-facade-live-implement-auth-facade-service-ropc-bridge,milestone-m6-auth-facade-live,5,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M6 — Auth Facade Live,"task,priority-p0,size-l,role-fullstack",Implement auth facade service (ROPC bridge),"Build the auth facade as a Node.js endpoint: POST /api/auth/login. Validate credentials via Keycloak ROPC using mobile-legacy-bridge client. Return old token format wrapping Keycloak JWT.
+
+Metadata:
+- Priority: P0
+- Size: L
+- Role: Fullstack
+- Milestone: M6 — Auth Facade Live"
+task-m6-auth-facade-live-implement-version-gate-in-auth-facade,milestone-m6-auth-facade-live,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M6 — Auth Facade Live,"task,priority-p0,size-s,role-fullstack",Implement version gate in auth facade,"Add App-Version check in the facade. Return 410 Gone with update_url for versions below MIN_SUPPORTED_VERSION. Wire the version check before the ROPC call.
+
+Metadata:
+- Priority: P0
+- Size: S
+- Role: Fullstack
+- Milestone: M6 — Auth Facade Live"
+task-m6-auth-facade-live-add-app-version-header-to-old-mobile-app-requests,milestone-m6-auth-facade-live,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M6 — Auth Facade Live,"task,priority-p1,size-s,role-mobile",Add App-Version header to old mobile app requests,"Update old mobile app to send App-Version as a header or body field on every auth request. This enables the version gate to work correctly.
+
+Metadata:
+- Priority: P1
+- Size: S
+- Role: Mobile
+- Milestone: M6 — Auth Facade Live"
+task-m6-auth-facade-live-integrate-new-mobile-app-with-appauth-pkce,milestone-m6-auth-facade-live,5,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M6 — Auth Facade Live,"task,priority-p0,size-l,role-mobile",Integrate new mobile app with AppAuth / PKCE,"Implement OIDC Authorization Code + PKCE flow using AppAuth-Android / AppAuth-iOS (or expo-auth-session / flutter_appauth). Wire to sso.kiebtg.app external realm.
+
+Metadata:
+- Priority: P0
+- Size: L
+- Role: Mobile
+- Milestone: M6 — Auth Facade Live"
+task-m6-auth-facade-live-test-old-mobile-app-through-auth-facade-on-staging,milestone-m6-auth-facade-live,3,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M6 — Auth Facade Live,"task,priority-p0,size-m,role-mobile",Test old mobile app through auth facade on staging,"Run old app version against staging facade. Confirm login succeeds. Confirm old token format is returned. Confirm app session works as before.
+
+Metadata:
+- Priority: P0
+- Size: M
+- Role: Mobile
+- Milestone: M6 — Auth Facade Live"
+task-m6-auth-facade-live-test-new-mobile-app-pkce-flow-on-staging,milestone-m6-auth-facade-live,3,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M6 — Auth Facade Live,"task,priority-p0,size-m,role-mobile",Test new mobile app PKCE flow on staging,"Run new mobile app version against staging Keycloak. Confirm PKCE flow completes. Confirm native JWT received. Confirm API calls authorised.
+
+Metadata:
+- Priority: P0
+- Size: M
+- Role: Mobile
+- Milestone: M6 — Auth Facade Live"
+task-m6-auth-facade-live-deploy-auth-facade-to-production,milestone-m6-auth-facade-live,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M6 — Auth Facade Live,"task,priority-p0,size-s,role-fullstack",Deploy auth facade to production,"Deploy the auth facade service to production. Confirm routing from old mobile app is live. Confirm ROPC calls reach Keycloak production realm (sso.kiebtg.app).
+
+Metadata:
+- Priority: P0
+- Size: S
+- Role: Fullstack
+- Milestone: M6 — Auth Facade Live"
+task-m7-wave-3-apps-integrated-register-wave-3-customer-facing-apps-as-keycloak-clients,milestone-m7-wave-3-apps-integrated,3,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M7 — Wave 3 Apps Integrated,"task,priority-p0,size-m,role-fullstack",Register Wave 3 customer-facing apps as Keycloak clients,"For each customer-facing app register a Keycloak client in the external realm. Set exact redirect URIs web origins and client authentication. Double check settings before enabling SSO.
+
+Metadata:
+- Priority: P0
+- Size: M
+- Role: Fullstack
+- Milestone: M7 — Wave 3 Apps Integrated"
+task-m7-wave-3-apps-integrated-integrate-wave-3-spas-with-oidc-client-ts-external-realm,milestone-m7-wave-3-apps-integrated,5,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M7 — Wave 3 Apps Integrated,"task,priority-p0,size-l,role-fullstack",Integrate Wave 3 SPAs with oidc-client-ts (external realm),"Apply oidc-client-ts integration to customer-facing SPAs. Use external realm authority URL. Token stored in memory only.
+
+Metadata:
+- Priority: P0
+- Size: L
+- Role: Fullstack
+- Milestone: M7 — Wave 3 Apps Integrated"
+task-m7-wave-3-apps-integrated-implement-jwt-validation-on-wave-3-backend-apis,milestone-m7-wave-3-apps-integrated,5,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M7 — Wave 3 Apps Integrated,"task,priority-p0,size-l,role-fullstack",Implement JWT validation on Wave 3 backend APIs,"Apply JWKS middleware to Wave 3 backend APIs. Use external realm issuer and correct audience per app.
+
+Metadata:
+- Priority: P0
+- Size: L
+- Role: Fullstack
+- Milestone: M7 — Wave 3 Apps Integrated"
+task-m7-wave-3-apps-integrated-define-client-level-roles-for-wave-3-apps,milestone-m7-wave-3-apps-integrated,3,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M7 — Wave 3 Apps Integrated,"task,priority-p1,size-m,role-fullstack",Define client-level roles for Wave 3 apps,"Define client roles for all Wave 3 apps in the external realm. Assign customer realm role + app-specific client roles to test external users.
+
+Metadata:
+- Priority: P1
+- Size: M
+- Role: Fullstack
+- Milestone: M7 — Wave 3 Apps Integrated"
+task-m7-wave-3-apps-integrated-end-to-end-test-wave-3-apps-with-real-external-users,milestone-m7-wave-3-apps-integrated,3,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M7 — Wave 3 Apps Integrated,"task,priority-p0,size-m,role-fullstack",End-to-end test Wave 3 apps with real external users,"Perform login tests with a sample of real external users. Confirm full flow from login to API access works. Confirm no disruption to existing sessions.
+
+Metadata:
+- Priority: P0
+- Size: M
+- Role: Fullstack
+- Milestone: M7 — Wave 3 Apps Integrated"
+task-m7-wave-3-apps-integrated-apm-communicate-sso-rollout-to-external-users-wave-3,milestone-m7-wave-3-apps-integrated,3,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M7 — Wave 3 Apps Integrated,"task,priority-p0,size-m,role-apm",APM: Communicate SSO rollout to external users (Wave 3),"Draft and publish external user notice about the login change. Explain what changes what stays the same and support contact. Coordinate with product/support team.
+
+Metadata:
+- Priority: P0
+- Size: M
+- Role: APM
+- Milestone: M7 — Wave 3 Apps Integrated"
+task-m8-local-auth-decommissioned-disable-local-login-form-on-wave-1-app,milestone-m8-local-auth-decommissioned,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M8 — Local Auth Decommissioned,"task,priority-p1,size-s,role-fullstack",Disable local login form on Wave 1 app,"Remove or hide the local email/password login form on the Wave 1 app. SSO is now the only login path. Verify no local auth code path remains active.
+
+Metadata:
+- Priority: P1
+- Size: S
+- Role: Fullstack
+- Milestone: M8 — Local Auth Decommissioned"
+task-m8-local-auth-decommissioned-remove-password-columns-from-wave-1-app-database,milestone-m8-local-auth-decommissioned,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M8 — Local Auth Decommissioned,"task,priority-p1,size-s,role-fullstack",Remove password columns from Wave 1 app database,"Drop password_hash and related auth columns from the Wave 1 app's users table after confirming keycloak_id is populated for all users and SSO has been stable for 2+ weeks.
+
+Metadata:
+- Priority: P1
+- Size: S
+- Role: Fullstack
+- Milestone: M8 — Local Auth Decommissioned"
+task-m8-local-auth-decommissioned-remove-local-auth-dependencies-from-wave-1-codebase,milestone-m8-local-auth-decommissioned,3,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M8 — Local Auth Decommissioned,"task,priority-p1,size-m,role-fullstack",Remove local auth dependencies from Wave 1 codebase,"Uninstall auth libraries (bcrypt passport etc) no longer needed. Remove middleware routes and config related to local auth. Clean up dead code.
+
+Metadata:
+- Priority: P1
+- Size: M
+- Role: Fullstack
+- Milestone: M8 — Local Auth Decommissioned"
+task-m8-local-auth-decommissioned-repeat-local-auth-decommission-for-all-remaining-apps,milestone-m8-local-auth-decommissioned,8,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M8 — Local Auth Decommissioned,"task,priority-p1,size-xl,role-fullstack",Repeat local auth decommission for all remaining apps,"Perform the same disable-remove-cleanup steps for all Wave 2 and Wave 3 apps. Work through apps one by one after each has been stable for at least 2 weeks.
+
+Metadata:
+- Priority: P1
+- Size: XL
+- Role: Fullstack
+- Milestone: M8 — Local Auth Decommissioned"
+task-m8-local-auth-decommissioned-apm-confirm-decommission-completion-across-all-apps,milestone-m8-local-auth-decommissioned,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M8 — Local Auth Decommissioned,"task,priority-p1,size-s,role-apm",APM: Confirm decommission completion across all apps,"Verify all apps have local auth disabled password columns removed and unused deps cleaned. Update project tracker. Mark M8 complete.
+
+Metadata:
+- Priority: P1
+- Size: S
+- Role: APM
+- Milestone: M8 — Local Auth Decommissioned"
+task-m9-mobile-facade-sunset-monitor-app-store-adoption-rate-for-old-mobile-version,milestone-m9-mobile-facade-sunset,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M9 — Mobile Facade Sunset,"task,priority-p1,size-s,role-apm",Monitor app store adoption rate for old mobile version,"Track percentage of active external users on the new mobile app version via app store analytics. Target: ≥90% before triggering hard cutoff.
+
+Metadata:
+- Priority: P1
+- Size: S
+- Role: APM
+- Milestone: M9 — Mobile Facade Sunset"
+task-m9-mobile-facade-sunset-add-in-app-deprecation-banner-to-old-mobile-app,milestone-m9-mobile-facade-sunset,3,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M9 — Mobile Facade Sunset,"task,priority-p1,size-m,role-mobile",Add in-app deprecation banner to old mobile app,"At month 3–4 ship an update to the old mobile app showing an in-app banner: Please update your app by [date]. Link to app store listing.
+
+Metadata:
+- Priority: P1
+- Size: M
+- Role: Mobile
+- Milestone: M9 — Mobile Facade Sunset"
+task-m9-mobile-facade-sunset-enforce-410-gone-in-auth-facade-for-unsupported-versions,milestone-m9-mobile-facade-sunset,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M9 — Mobile Facade Sunset,"task,priority-p0,size-s,role-fullstack",Enforce 410 Gone in auth facade for unsupported versions,"At month 6–9 (when adoption ≥90%) update MIN_SUPPORTED_VERSION in the facade to cut off old versions. Deploy. Confirm 410 response returned to old clients.
+
+Metadata:
+- Priority: P0
+- Size: S
+- Role: Fullstack
+- Milestone: M9 — Mobile Facade Sunset"
+task-m9-mobile-facade-sunset-decommission-auth-facade-service,milestone-m9-mobile-facade-sunset,3,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M9 — Mobile Facade Sunset,"task,priority-p1,size-m,role-fullstack",Decommission auth facade service,"After cutoff is stable and no old clients are reaching the facade shut down the facade service. Remove the mobile-legacy-bridge client from Keycloak. Clean up related code.
+
+Metadata:
+- Priority: P1
+- Size: M
+- Role: Fullstack
+- Milestone: M9 — Mobile Facade Sunset"
+task-m9-mobile-facade-sunset-apm-final-mobile-migration-sign-off,milestone-m9-mobile-facade-sunset,1,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M9 — Mobile Facade Sunset,"task,priority-p1,size-xs,role-apm",APM: Final mobile migration sign-off,"Confirm facade is decommissioned adoption is 100% on new app and no legacy auth paths remain. Update project documentation and close out the migration.
+
+Metadata:
+- Priority: P1
+- Size: XS
+- Role: APM
+- Milestone: M9 — Mobile Facade Sunset"
+task-m1-infrastructure-ready-set-up-daily-postgresql-backup-via-pg-dump,milestone-m1-infrastructure-ready,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M1 — Infrastructure Ready,"task,priority-p0,size-s,role-fullstack",Set up daily PostgreSQL backup via pg_dump,"Configure a cron job or scheduled task to run pg_dump keycloak daily. Store backup files off-server (S3 NAS or equivalent). Test restore procedure.
+
+Metadata:
+- Priority: P0
+- Size: S
+- Role: Fullstack
+- Milestone: M1 — Infrastructure Ready"
+task-m2-realm-and-identity-configured-set-up-weekly-realm-json-export,milestone-m2-realm-and-identity-configured,1,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M2 — Realm & Identity Configured,"task,priority-p1,size-xs,role-apm",Set up weekly realm JSON export,"Schedule a weekly reminder or script to export realm JSON from Keycloak Admin Console for both realms. Commit to git or store in secure backup location.
+
+Metadata:
+- Priority: P1
+- Size: XS
+- Role: APM
+- Milestone: M2 — Realm & Identity Configured"
+task-m1-infrastructure-ready-configure-uptime-monitoring-and-alerts,milestone-m1-infrastructure-ready,2,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M1 — Infrastructure Ready,"task,priority-p0,size-s,role-fullstack",Configure uptime monitoring and alerts,"Set up uptime alerts on /health/live and /health/ready for both staging and production. Configure notification to the team on failure (email Slack etc).
+
+Metadata:
+- Priority: P0
+- Size: S
+- Role: Fullstack
+- Milestone: M1 — Infrastructure Ready"
+task-m2-realm-and-identity-configured-enable-and-configure-keycloak-event-logging,milestone-m2-realm-and-identity-configured,1,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M2 — Realm & Identity Configured,"task,priority-p1,size-xs,role-fullstack",Enable and configure Keycloak event logging,"Enable Admin Events and Login Events in both realms (Realm Settings → Events). Set retention period. Confirm login failure events are captured.
+
+Metadata:
+- Priority: P1
+- Size: XS
+- Role: Fullstack
+- Milestone: M2 — Realm & Identity Configured"
+task-m2-realm-and-identity-configured-enable-2fa-on-all-keycloak-admin-accounts,milestone-m2-realm-and-identity-configured,1,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M2 — Realm & Identity Configured,"task,priority-p0,size-xs,role-apm",Enable 2FA on all Keycloak admin accounts,"Enforce 2FA for all accounts with admin access to the Keycloak master realm and realm-admin accounts. Verify OTP setup for each team member with admin access.
+
+Metadata:
+- Priority: P0
+- Size: XS
+- Role: APM
+- Milestone: M2 — Realm & Identity Configured"
+task-m2-realm-and-identity-configured-create-realm-admin-user-per-realm-for-day-to-day-ops,milestone-m2-realm-and-identity-configured,1,organization,Mozhaiq-Dev,kie-sso-migration-script,,6,,M2 — Realm & Identity Configured,"task,priority-p0,size-xs,role-fullstack",Create realm-admin user per realm for day-to-day ops,"Create a dedicated realm-admin user in both internal and external realms. Use these for daily operations. Reserve master realm admin credentials in password manager only for break-glass use.
+
+Metadata:
+- Priority: P0
+- Size: XS
+- Role: Fullstack
+- Milestone: M2 — Realm & Identity Configured"

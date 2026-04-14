@@ -1,0 +1,10 @@
+Title,Description,Due (Week)
+M1 — Infrastructure Ready,"Keycloak running on Docker Compose with PostgreSQL, nginx reverse proxy configured, TLS active on staging and production domains. Health check endpoint responding.",Week 2
+M2 — Realm & Identity Configured,"Internal and external realms created. Password policies set. Realm-level roles defined. User profile attributes confirmed. app-provisioner service client created.",Week 3
+M3 — Users Migrated,"All existing users bulk-imported into Keycloak with bcrypt hashes. keycloak_id backfilled into all app databases. Zero NULL keycloak_id for active users. Verified on staging first.",Week 3
+M4 — Wave 1 Apps Integrated,"1–2 lowest-risk internal apps integrated with Keycloak SSO. OIDC flow working end-to-end. JWT validation on backend confirmed. Local auth still active in parallel.",Week 4
+M5 — Wave 2 Apps Integrated,"All remaining internal apps integrated. Client roles defined per app. Access control via JWT claims verified for all internal users.",Week 6
+M6 — Auth Facade Live,"Auth facade deployed. Old mobile app versions routing through ROPC bridge to Keycloak. Version gate active. New mobile app using PKCE flow. Both paths verified.",Week 6
+M7 — Wave 3 Apps Integrated,"All customer-facing apps integrated with Keycloak external realm. End-to-end tested with real external users. Mobile new version live in app stores.",Week 8
+M8 — Local Auth Decommissioned,"Local auth disabled on all apps. Password columns removed from app databases. Unused auth dependencies removed from codebases. SSO is the only login method.",Week 12
+M9 — Mobile Facade Sunset,"Auth facade returns 410 Gone for old mobile versions. Deprecation notice shown from month 3–4. Hard cutoff enforced at month 6–9 based on adoption analytics.",Month 9

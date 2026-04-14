@@ -70,6 +70,11 @@ Optional status:
 
 - status: A status value. Must be exactly one of the selectable value in the Status project field.
 
+Optional repo milestone:
+
+- milestone: optional GitHub milestone title for this issue. Milestones are auto-created if
+  missing in the repository.
+
 
 Optional Issues and Subissues support:
 
@@ -140,6 +145,10 @@ rate_limiter = RateLimiter(
     time_frame=RATE_LIMIT_TIME_FRAME,
 )
 
+# {(account_name, repo_name) -> {milestone_title: milestone_number}}
+MILESTONE_NUMBERS_BY_REPO = defaultdict(dict)
+MILESTONES_LOADED_BY_REPO = set()
+
 
 def handle_rate_limit(response):
     """
@@ -193,7 +202,81 @@ def check_rate_limit_status(response):
         click.echo("Rate limit information not available in the response headers.")
 
 
-@dataclasses.dataclass(kw_only=True)
+def load_milestones_by_title(account_name, repo_name):
+    """
+    Load and cache all milestones for a repo, keyed by title.
+    """
+    repo_key = (account_name, repo_name)
+    if repo_key in MILESTONES_LOADED_BY_REPO:
+        return
+
+    api_url = f"https://api.github.com/repos/{account_name}/{repo_name}/milestones"
+    page = 1
+    while True:
+        rate_limiter.wait()
+        params = {"state": "all", "per_page": 100, "page": page}
+        response = requests.get(url=api_url, headers=auth_headers, params=params)
+        try:
+            handle_rate_limit(response)
+        except Exception as e:
+            raise Exception(
+                f"Failed to load milestones from {api_url} with params={params}"
+            ) from e
+        check_rate_limit_status(response)
+        results = response.json()
+        if not results:
+            break
+
+        for milestone in results:
+            title = (milestone.get("title") or "").strip()
+            number = milestone.get("number")
+            if title and number:
+                MILESTONE_NUMBERS_BY_REPO[repo_key][title] = int(number)
+
+        if len(results) < 100:
+            break
+        page += 1
+
+    MILESTONES_LOADED_BY_REPO.add(repo_key)
+
+
+def get_or_create_milestone_number(account_name, repo_name, milestone_title):
+    """
+    Return a repo milestone number for ``milestone_title``.
+    Create milestone if missing.
+    """
+    milestone_title = (milestone_title or "").strip()
+    if not milestone_title:
+        return 0
+
+    repo_key = (account_name, repo_name)
+    load_milestones_by_title(account_name=account_name, repo_name=repo_name)
+
+    existing = MILESTONE_NUMBERS_BY_REPO[repo_key].get(milestone_title)
+    if existing:
+        return existing
+
+    api_url = f"https://api.github.com/repos/{account_name}/{repo_name}/milestones"
+    request_data = {"title": milestone_title}
+    rate_limiter.wait()
+    response = requests.post(url=api_url, headers=auth_headers, json=request_data)
+
+    try:
+        handle_rate_limit(response)
+    except Exception as e:
+        raise Exception(
+            f"Failed to create milestone {milestone_title!r} in {account_name}/{repo_name}"
+        ) from e
+
+    check_rate_limit_status(response)
+    results = response.json()
+    milestone_number = int(results["number"])
+    MILESTONE_NUMBERS_BY_REPO[repo_key][milestone_title] = milestone_number
+    click.echo(f"Created Milestone: {milestone_title!r} in {account_name}/{repo_name}")
+    return milestone_number
+
+
+@dataclasses.dataclass
 class Item:
     """An issue or PR"""
 
@@ -216,6 +299,9 @@ class Item:
     item_node_id: str = ""
 
     title: str = ""
+
+    # Optional GitHub milestone title. Missing milestones are auto-created.
+    milestone: str = ""
 
     # Optional:
     status: str = ""
@@ -336,7 +422,7 @@ class Item:
         return self.full_url
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass
 class Issue(Item):
     """
     A GitHub issue with is title and body.
@@ -371,9 +457,16 @@ class Issue(Item):
         api_url = f"https://api.github.com/repos/{self.account_name}/{self.repo_name}/issues"
         request_data = {"title": self.title, "body": self.get_body()}
         labels = self.labels or []
+        milestone = self.milestone.strip()
 
         if labels:
             request_data["labels"] = labels
+        if milestone:
+            request_data["milestone"] = get_or_create_milestone_number(
+                account_name=self.account_name,
+                repo_name=self.repo_name,
+                milestone_title=milestone,
+            )
 
         response = requests.post(url=api_url, headers=headers, json=request_data)
 
@@ -488,6 +581,7 @@ class Issue(Item):
             account_type=data["account_type"].strip(),
             account_name=data["account_name"].strip(),
             repo_name=data["repo_name"].strip(),
+            milestone=data.get("milestone", "").strip() or "",
 
             labels=labels,
 
@@ -554,7 +648,7 @@ def graphql_query(query, variables=None, headers=auth_headers, retries=0):
         )
 
 
-@dataclasses.dataclass(kw_only=True)
+@dataclasses.dataclass
 class Project:
     """
     A GitHub project, identified by its project number in a GitHub account.

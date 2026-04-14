@@ -55,9 +55,35 @@ You need first to install these dependencies in your virtualenv::
 
 Then run the script this way::
 
-    python src/import_issues.py --help
+    python src/import_issue.py --help
 
 You need to have pre-existing repositories and projects created in GitHub.
+
+### Convert milestone + task CSVs
+
+If you have separate milestone and task CSV files, convert them first to the
+single `issues.csv` format expected by this importer:
+
+```bash
+python src/convert_milestones_tasks.py \
+  --milestones-file /path/to/milestones.csv \
+  --tasks-file /path/to/tasks.csv \
+  --output-file /path/to/issues-ready.csv \
+  --account-type organization \
+  --account-name YOUR_GITHUB_ORG \
+  --repo-name YOUR_GITHUB_REPO \
+  --project-number 0
+```
+
+Notes:
+- Milestones are converted to parent issues.
+- Tasks are converted to sub-issues linked using `project_issue_id` and
+  `project_parent_issue_id`.
+- `--project-number 0` means issues are created only in the repo (not added to
+  GitHub Projects).
+- Set `--project-number` to your project number if you want project items too.
+- Add `--no-milestone-issues` if you want to create only task issues while still
+  assigning GitHub milestones to tasks.
 
 
 #### CSV File Format
@@ -86,6 +112,11 @@ Optional Project fields support:
 - project_estimate: a rough estimate to complete this issue as a number of days.
   This is used to populate an "Estimate" custom project field that needs to be created first as
   a "number" field in the Project.
+
+Optional repo milestone support:
+
+- milestone: optional GitHub milestone title to set on an issue. If the milestone does not
+  exist yet in the target repository, it is auto-created during import.
 
 ##### Optional issue ids and subissues support:
 
